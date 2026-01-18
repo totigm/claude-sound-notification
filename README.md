@@ -5,7 +5,7 @@ Get an audio notification when Claude Code finishes a task. Never miss when Clau
 ## Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/totigm/claude-sound/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/totigm/claude-sound-notification/main/install.sh | bash
 ```
 
 ## What it does
