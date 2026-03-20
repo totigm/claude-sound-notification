@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Claude Code Sound Notifications Installer
-# Plays a sound when Claude Code finishes a task
+# Plays different sounds when Claude Code finishes a task vs needs user input
 # Supports macOS, Linux, and Windows (Git Bash/WSL)
 
 set -e
@@ -29,6 +29,17 @@ write_config() {
           }
         ]
       }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /System/Library/Sounds/Funk.aiff"
+          }
+        ]
+      }
     ]
   },
   "permissions": {
@@ -50,6 +61,17 @@ MACEOF
           {
             "type": "command",
             "command": "paplay /usr/share/sounds/freedesktop/stereo/complete.oga 2>/dev/null || aplay /usr/share/sounds/sound-icons/glass-water-1.wav 2>/dev/null || echo -e '\\a'"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "paplay /usr/share/sounds/freedesktop/stereo/message.oga 2>/dev/null || aplay /usr/share/sounds/sound-icons/prompt.wav 2>/dev/null || echo -e '\\a'"
           }
         ]
       }
@@ -79,6 +101,17 @@ LINUXEOF
           }
         ]
       }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -c \"(New-Object Media.SoundPlayer 'C:/Windows/Media/notify.wav').PlaySync()\""
+          }
+        ]
+      }
     ]
   },
   "permissions": {
@@ -94,6 +127,17 @@ WINEOF
 {
   "hooks": {
     "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo -e '\\a'"
+          }
+        ]
+      }
+    ],
+    "Notification": [
       {
         "matcher": "",
         "hooks": [
