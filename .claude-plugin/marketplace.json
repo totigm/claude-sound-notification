@@ -1,0 +1,14 @@
+{
+  "name": "claude-sound-notification",
+  "owner": {
+    "name": "toti",
+    "email": "gonza@munoz.dev"
+  },
+  "plugins": [
+    {
+      "name": "claude-sound-notification",
+      "source": "./",
+      "description": "Plays different sounds when Claude Code finishes a task vs needs your input. Cross-platform."
+    }
+  ]
+}

@@ -4,33 +4,40 @@ Get audio notifications from Claude Code. Different sounds for when Claude finis
 
 ## Install
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/totigm/claude-sound-notification/main/install.sh | bash
+Inside Claude Code:
+
 ```
+/plugin marketplace add totigm/claude-sound-notification
+/plugin install claude-sound-notification@claude-sound-notification
+/reload-plugins
+```
+
+(For local development, point `marketplace add` at the cloned directory instead of the GitHub slug.)
 
 ## What it does
 
 Plays different sounds for two events:
-- **Task complete** (`Stop`) — Claude finished working
-- **Needs input** (`Notification`) — Claude is asking for permission or user input
+- **Task complete** (`Stop`) — Claude finished working.
+- **Needs input** (`Notification`) — Claude is asking for permission or user input.
 
 This way you know whether to just check results or go respond.
 
 ## Platform Support
 
-| Platform | Sound Player | Task Complete | Needs Input |
-|----------|--------------|---------------|-------------|
-| macOS | `afplay` | Glass.aiff | Funk.aiff |
-| Linux | `paplay`, `aplay`, or `mpv` | complete.oga | message.oga |
-| Windows | PowerShell | chimes.wav | notify.wav |
+| Platform | Player                         | Task Complete | Needs Input  |
+|----------|--------------------------------|---------------|--------------|
+| macOS    | `afplay`                       | Glass.aiff    | Funk.aiff    |
+| Linux    | `paplay` → `aplay` → `mpv`     | complete.oga  | message.oga  |
+| Windows  | PowerShell `Media.SoundPlayer` | chimes.wav    | notify.wav   |
 
-The installer auto-detects your OS and configures the appropriate sound command. Falls back to terminal bell (`\a`) if no audio player is found.
+The plugin auto-detects your OS at runtime. Falls back to the terminal bell (`\a`) if nothing else works.
 
-### Linux Requirements
+### Linux audio players
 
-Install one of these audio players:
+Install one of these on Linux:
+
 ```bash
-# Ubuntu/Debian (PulseAudio)
+# Ubuntu/Debian — PulseAudio
 sudo apt install pulseaudio-utils
 
 # Or ALSA
@@ -42,33 +49,34 @@ sudo apt install mpv
 
 ### Windows
 
-Run the installer in **Git Bash**, **WSL**, or **MSYS2**. PowerShell is used to play sounds.
+Run Claude Code under **Git Bash**, **WSL**, or **MSYS2** so the hook's `bash` shebang resolves. PowerShell is used internally to play sounds.
 
 ## Uninstall
 
-Remove the `Stop` and `Notification` hooks from `~/.claude/settings.json`, or restore from the backup:
+Inside Claude Code:
 
-```bash
-mv ~/.claude/settings.json.backup ~/.claude/settings.json
 ```
+/plugin uninstall claude-sound-notification
+```
+
+The plugin does not modify `~/.claude/settings.json`, so uninstall is clean — nothing to undo by hand.
 
 ## Customizing the sound
 
-Edit `~/.claude/settings.json` and change the sound commands for `Stop` and/or `Notification`.
+Edit `hooks/play.sh` in your local clone, then push to your own fork and install from there:
 
-**macOS system sounds:**
-- `/System/Library/Sounds/Glass.aiff` (default for Stop)
-- `/System/Library/Sounds/Funk.aiff` (default for Notification)
-- `/System/Library/Sounds/Pop.aiff`
-- `/System/Library/Sounds/Submarine.aiff`
-- `/System/Library/Sounds/Hero.aiff`
+```
+/plugin marketplace add <your-github-user>/claude-sound-notification
+/plugin install claude-sound-notification@claude-sound-notification
+```
 
-**Windows sounds:**
-- `C:\Windows\Media\chimes.wav` (default for Stop)
-- `C:\Windows\Media\notify.wav` (default for Notification)
-- `C:\Windows\Media\tada.wav`
+Suggested sound files to drop in:
 
-**Linux:** Use any `.oga`, `.wav`, or `.mp3` file with your preferred player.
+**macOS system sounds:** `Glass.aiff` · `Funk.aiff` · `Pop.aiff` · `Submarine.aiff` · `Hero.aiff` (all under `/System/Library/Sounds/`).
+
+**Windows sounds:** `chimes.wav` · `notify.wav` · `tada.wav` · `ding.wav` (all under `C:\Windows\Media\`).
+
+**Linux:** any `.oga`, `.wav`, or `.mp3` file your chosen player supports.
 
 ## License
 
