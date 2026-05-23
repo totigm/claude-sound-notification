@@ -1,0 +1,21 @@
+{
+  "name": "claude-sound-notification",
+  "version": "1.0.0",
+  "description": "Plays different sounds when Claude Code finishes a task vs needs your input. Cross-platform.",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/play.sh\" stop" }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/play.sh\" notification" }
+        ]
+      }
+    ]
+  }
+}

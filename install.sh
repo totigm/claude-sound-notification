@@ -1,180 +1,27 @@
 #!/bin/bash
+# This installer is deprecated. claude-sound-notification is now a Claude Code plugin.
+# The old installer overwrote ~/.claude/settings.json, which could clobber other
+# tools' hook config. The plugin install path is non-destructive and reversible.
+#
+# To install:
+#
+#   /plugin marketplace add totigm/claude-sound-notification
+#   /plugin install claude-sound-notification@claude-sound-notification
+#   /reload-plugins
+#
+# Run those three lines inside Claude Code, not in your terminal.
 
-# Claude Code Sound Notifications Installer
-# Plays different sounds when Claude Code finishes a task vs needs user input
-# Supports macOS, Linux, and Windows (Git Bash/WSL)
+cat <<'EOF'
+claude-sound-notification is now a Claude Code plugin.
 
-set -e
+Install from inside Claude Code:
 
-SETTINGS_FILE="$HOME/.claude/settings.json"
-CLAUDE_DIR="$HOME/.claude"
+  /plugin marketplace add totigm/claude-sound-notification
+  /plugin install claude-sound-notification@claude-sound-notification
+  /reload-plugins
 
-# Create .claude directory if it doesn't exist
-mkdir -p "$CLAUDE_DIR"
+See the README for details:
+  https://github.com/totigm/claude-sound-notification#install
+EOF
 
-# Detect OS and write appropriate config
-write_config() {
-  case "$(uname -s)" in
-    Darwin)
-      cat > "$SETTINGS_FILE" << 'MACEOF'
-{
-  "hooks": {
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "afplay /System/Library/Sounds/Glass.aiff"
-          }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "afplay /System/Library/Sounds/Funk.aiff"
-          }
-        ]
-      }
-    ]
-  },
-  "permissions": {
-    "allow": [
-      "Bash(afplay:*)"
-    ]
-  }
-}
-MACEOF
-      ;;
-    Linux)
-      cat > "$SETTINGS_FILE" << 'LINUXEOF'
-{
-  "hooks": {
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "paplay /usr/share/sounds/freedesktop/stereo/complete.oga 2>/dev/null || aplay /usr/share/sounds/sound-icons/glass-water-1.wav 2>/dev/null || echo -e '\\a'"
-          }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "paplay /usr/share/sounds/freedesktop/stereo/message.oga 2>/dev/null || aplay /usr/share/sounds/sound-icons/prompt.wav 2>/dev/null || echo -e '\\a'"
-          }
-        ]
-      }
-    ]
-  },
-  "permissions": {
-    "allow": [
-      "Bash(paplay:*)",
-      "Bash(aplay:*)",
-      "Bash(echo:*)"
-    ]
-  }
-}
-LINUXEOF
-      ;;
-    MINGW*|MSYS*|CYGWIN*)
-      cat > "$SETTINGS_FILE" << 'WINEOF'
-{
-  "hooks": {
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "powershell -c \"(New-Object Media.SoundPlayer 'C:/Windows/Media/chimes.wav').PlaySync()\""
-          }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "powershell -c \"(New-Object Media.SoundPlayer 'C:/Windows/Media/notify.wav').PlaySync()\""
-          }
-        ]
-      }
-    ]
-  },
-  "permissions": {
-    "allow": [
-      "Bash(powershell:*)"
-    ]
-  }
-}
-WINEOF
-      ;;
-    *)
-      cat > "$SETTINGS_FILE" << 'DEFAULTEOF'
-{
-  "hooks": {
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo -e '\\a'"
-          }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo -e '\\a'"
-          }
-        ]
-      }
-    ]
-  },
-  "permissions": {
-    "allow": [
-      "Bash(echo:*)"
-    ]
-  }
-}
-DEFAULTEOF
-      ;;
-  esac
-}
-
-# Backup existing settings if present
-if [ -f "$SETTINGS_FILE" ]; then
-  cp "$SETTINGS_FILE" "$SETTINGS_FILE.backup"
-  echo "Existing settings backed up to: $SETTINGS_FILE.backup"
-fi
-
-write_config
-
-echo ""
-echo "✓ Claude Code sound notifications installed!"
-echo "  Detected OS: $(uname -s)"
-echo ""
-echo "Restart Claude Code for changes to take effect."
-
-if [ -f "$SETTINGS_FILE.backup" ]; then
-  echo ""
-  echo "Note: If you had custom settings, manually merge from the backup."
-fi
+exit 0
